@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言用了一天时间学习了websocket，并搭建了一个简易的聊天室，虽然只能进行简单的聊天，但为了实现一些功能，比如分聊天室聊天，还有机器人自动发消息这种小功能，我还是花费了挺多时间的，所以写篇博客记录一下，以防以后犯同样的错误先粘一下代码地址吧：点我点我 知识点在http1.0版本里，通信是无状态的，就是说，客户端想要给服务器端发送消息，就只能建立连接-》发送消息-》连接断开，如果想重新发送，就">
+<meta property="og:type" content="article">
+<meta property="og:title" content="websocket聊天室开发">
+<meta property="og:url" content="http://yoursite.com/2017/02/17/websocket%E8%81%8A%E5%A4%A9%E5%AE%A4%E5%BC%80%E5%8F%91/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="前言用了一天时间学习了websocket，并搭建了一个简易的聊天室，虽然只能进行简单的聊天，但为了实现一些功能，比如分聊天室聊天，还有机器人自动发消息这种小功能，我还是花费了挺多时间的，所以写篇博客记录一下，以防以后犯同样的错误先粘一下代码地址吧：点我点我 知识点在http1.0版本里，通信是无状态的，就是说，客户端想要给服务器端发送消息，就只能建立连接-》发送消息-》连接断开，如果想重新发送，就">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2017-02-17T15:23:12.000Z">
+<meta property="article:modified_time" content="2020-02-04T15:31:16.985Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/02/17/websocket聊天室开发/"/>
+
+
+
+
+
+  <title>websocket聊天室开发 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/17/websocket%E8%81%8A%E5%A4%A9%E5%AE%A4%E5%BC%80%E5%8F%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">websocket聊天室开发</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-17T23:23:12+08:00">
+                2017-02-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>用了一天时间学习了websocket，并搭建了一个简易的聊天室，虽然只能进行简单的聊天，但<br>为了实现一些功能，比如分聊天室聊天，还有机器人自动发消息这种小功能，我还是花费了挺多时间的，所以写篇博客记录一下，以防以后犯同样的错误<br>先粘一下代码地址吧：<a href="https://github.com/ljuyi/chatRoom" target="_blank" rel="noopener">点我点我</a></p>
+<h4 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h4><p>在http1.0版本里，通信是无状态的，就是说，客户端想要给服务器端发送消息，就只能建立连接-》发送消息-》连接断开，如果想重新发送，就必须又要重新建立新的连接，十分麻烦，这很明显增加了客户端和服务端的时间成本。<br>在websocket之前还有两种方法（具体出现时间不太清楚）,ajax轮询，长轮询。<br>先来说说ajax轮询：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">客户端：啦啦啦，有没有新信息(Request)</span><br><span class="line">服务端：没有（Response）</span><br><span class="line">客户端：啦啦啦，有没有新信息(Request)</span><br><span class="line">服务端：没有。。（Response）</span><br><span class="line">客户端：啦啦啦，有没有新信息(Request)</span><br><span class="line">服务端：你好烦啊，没有啊。。（Response）</span><br><span class="line">客户端：啦啦啦，有没有新消息（Request）</span><br><span class="line">服务端：好啦好啦，有啦给你。（Response）</span><br><span class="line">客户端：啦啦啦，有没有新消息（Request）服务端：。。。。。没。。。。没。。。没有（Response）</span><br></pre></td></tr></table></figure>
+<p>看起来和普通的ajax请求似乎并无差别，唯一不同的是客户端每隔一段时间就会发送请求，其实就是用setInterval将一个ajax请求包起来，自己设定请求间隔时间<br>长轮询:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">客户端：啦啦啦，有没有新信息，没有的话就等有了才返回给我吧（Request）</span><br><span class="line">服务端：额。。 等待到有消息的时候。。来 给你（Response）</span><br><span class="line">客户端：啦啦啦，有没有新信息，没有的话就等有了才返回给我吧（Request）</span><br><span class="line">（来自：知乎 作者：Ovear</span><br><span class="line">链接：https:&#x2F;&#x2F;www.zhihu.com&#x2F;question&#x2F;20215561&#x2F;answer&#x2F;40316953）</span><br></pre></td></tr></table></figure>
+<p>长轮询比ajax轮询上了一个档次，客户端有请求时向服务端发送请求，但是服务端可以不立即进行回复，而是等到有消息了再进行回复，而这段时间，客户端和服务端是一直保持连接状态的，当服务端有消息回复时，这种连接状态就断开了，客户端需要再次像服务端建立连接请求，comet就技术使用了这种方法，不过我没有用过，不太了解</p>
+<p>终于到了websocket<br>上面的两种方法都没有解决服务器端不能向客户端主动发送请求的问题，这样的弊端就是如果有hin多hin多的客户端同时发送请求，服务器端就会忙不过来，于是。。503。。websocket就完美地解决了这个问题，客户端只需要向服务器端发送一次建立连接的请求，这种连接状态就会一直保持，直到客户端关闭请求，服务器端也可以主动向服务器端进行消息的发送，是不是很棒~</p>
+<h4 id="项目应用"><a href="#项目应用" class="headerlink" title="项目应用"></a>项目应用</h4><p>来说项目吧，css样式上，我使用了frozen的框架，因为自己写的太丑，而且主要实现的是<br>能，所以想在样式上节省点时间看着官方文档，用起来还是很简单的。<br>然后就要用npm安装需要的包了，我用了express搭建服务器，socket.io建立websocket通信，socket.io有开发文档，使用方法学起来也挺快的，主要就是在实现逻辑上耗费了比较长的时间</p>
+<p>socket的发送消息的方法有三种（服务器端）：<br>io.socket.emit(); //向所有建立连接的客户端广播<br>socket.broadcast.emit(); //向除了建立连接的其他所有客户端广播<br>socket.emit(); //向建立该连接的客户端广播</p>
+<p>客户端代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">socket.on(&#39;chatMessage&#39;, function(data)&#123;</span><br><span class="line">    if(data.room &#x3D;&#x3D; roomNum)&#123;</span><br><span class="line">        $(&#39;.ui-tab-content .ui-list&#39;).append(&#39;&lt;li&gt;&lt;p&gt;&#39;+data.name+&#39;&lt;&#x2F;p&gt;&lt;h4 class&#x3D;&quot;dialog&quot;&gt;&#39;+data.mes+&#39;&lt;&#x2F;h4&gt;&lt;&#x2F;li&gt;&#39;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br><span class="line">socket.on(&#39;newFriend&#39;, function(data)&#123;</span><br><span class="line">    if(data.room &#x3D;&#x3D; roomNum)&#123;</span><br><span class="line">        $(&#39;.ui-tab-content .ui-list&#39;).append(&#39;&lt;li&gt;&lt;p&gt;&#39;+data.name+&#39;&lt;&#x2F;p&gt;&lt;h4 class&#x3D;&quot;dialog&quot;&gt;&#39;+data.mes+&#39;&lt;&#x2F;h4&gt;&lt;&#x2F;li&gt;&#39;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br><span class="line">socket.on(&#39;myMessage&#39;, function(data)&#123;</span><br><span class="line">    if(data.room &#x3D;&#x3D; roomNum)&#123;</span><br><span class="line">        $(&#39;.ui-tab-content .ui-list&#39;).append(&#39;&lt;li&gt;&lt;h4 class&#x3D;&quot;my-dialog&quot;&gt;&#39;+data.mes+&#39;&lt;&#x2F;h4&gt;&lt;p&gt;&#39;+data.name+&#39;&lt;&#x2F;p&gt;&lt;&#x2F;li&gt;&#39;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>服务端代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">var app &#x3D; require(&#39;express&#39;)();</span><br><span class="line">var http &#x3D; require(&#39;http&#39;).Server(app);</span><br><span class="line">var io &#x3D; require(&#39;socket.io&#39;)(http);</span><br><span class="line">io.on(&#39;connection&#39;, function (socket) &#123;</span><br><span class="line">    console.log(socket.request.connection.remoteAddress + &#39; user connected&#39;); &#x2F;&#x2F; 获取客户端ip</span><br><span class="line">    &#x2F;*机器人广播*&#x2F;</span><br><span class="line">    socket.broadcast.emit(&#39;newFriend&#39;, &#123;&#39;room&#39;:socket.handshake.query.roomNum,&#39;name&#39;:&#39;机器人&#39;,&#39;mes&#39;:&#39;有新朋友来啦！&#39;&#125;);</span><br><span class="line">    &#x2F;*聊天消息广播*&#x2F;</span><br><span class="line">    socket.on(&#39;chatMessage&#39;, function (data) &#123;</span><br><span class="line">        socket.broadcast.emit(&#39;chatMessage&#39;, &#123;&#39;room&#39;:data.room,&#39;name&#39;: data.name,&#39;mes&#39;: data.mes&#125;);</span><br><span class="line">        socket.emit(&#39;myMessage&#39;, &#123;&#39;room&#39;:data.room,&#39;name&#39;:data.name,&#39;mes&#39;:data.mes&#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><code>socket.io</code>有三种默认事件：<br><code>connection</code>:建立连接时触发<br><code>disconnect</code>：断开连接时触发<br><code>message</code>：对方发来数据时触发<br><code>socket.io</code>也支持自定义事件</p>
+<p>简单的原理介绍：当客户端进入到聊天室中时，js文件加载，客户端和服务端建立连接，于是服务器端触发了connection事件，向除了建立连接的其他客户端广播机器人消息（newFriend），用户聊天时触发chatMessage，客户端绑定的chatMessage和newFriend事件通过服务器端的广播而触发，再将服务器广播的消息展示在页面上</p>
+<p>问题与解决办法<br>当有用户进入房间时，我如何确定房间号，并向该房间的其他人广播？<br>第一次开发时没有想到在建立连接时将房间号发送给服务端，一直在纠结怎样在扫码完就把房<br>间号传给服务端，结果走了很多弯路</p>
+<p>房间号的传递只能扫码完后由服务器端发送给新的页面吗？<br>刚开始我一直在纠结，觉得这样太麻烦，之前也没有怎么用过localStorage这种客户端存储信<br>息的方法，所以一时没有想到</p>
+<p>怎样分房间聊天？<br>因为socket.io的广播方式是对全体客户端进行广播，要是想实现分房间广播就有两种方式，<br>一种是在服务端确定广播的对象，一种是在客户端。要是在服务器端确定的话，就要绑定许多许多事件，每建立一个房间，就要绑定给这个房间绑定一遍所有的事件，然后根据事件的名称进行对象确定，这无疑增加了服务器端的资源耗费，于是我就采用了在客户端进行筛选广播对象，只用在客户端广播消息时增加一个房间号信息，在客户端进行房间号匹配，如果相等则将信息更新。但是我觉得这种方法也有弊端，别的房间的信息有可能会被窃取。有更好的方法再更新。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/14/sass%E2%80%94%E2%80%94css%E9%A2%84%E7%BC%96%E8%AF%91%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0/" rel="next" title="sass——css预编译器的学习">
+                <i class="fa fa-chevron-left"></i> sass——css预编译器的学习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/27/%E5%89%8D%E5%BE%80%E5%8D%9A%E5%AE%A2%E5%9B%AD/" rel="prev" title="前往博客园">
+                前往博客园 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#知识点"><span class="nav-number">2.</span> <span class="nav-text">知识点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#项目应用"><span class="nav-number">3.</span> <span class="nav-text">项目应用</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言学习了vue一段时间了，在网上跟着老师用vue做了一遍饿了么的几个页面，觉得学习一个新技术还是项目驱动学起来更加的快，于是把之前和项目小组的小伙伴们写的在线考试系统重新用vue做一遍，之前做的时候只想着实现功能，导致页面性能根本没有考虑，每次点击跳转都慢的。。。虽然这个考试系统没有投入使用，但把它做好做优秀也会很有成就感，说不定将来就用上了呢。项目地址 介绍先来介绍一下这个项目吧，主要实现的功">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vue重构在线考试系统">
+<meta property="og:url" content="http://yoursite.com/2017/06/16/vue%E9%87%8D%E6%9E%84%E5%9C%A8%E7%BA%BF%E8%80%83%E8%AF%95%E7%B3%BB%E7%BB%9F/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="前言学习了vue一段时间了，在网上跟着老师用vue做了一遍饿了么的几个页面，觉得学习一个新技术还是项目驱动学起来更加的快，于是把之前和项目小组的小伙伴们写的在线考试系统重新用vue做一遍，之前做的时候只想着实现功能，导致页面性能根本没有考虑，每次点击跳转都慢的。。。虽然这个考试系统没有投入使用，但把它做好做优秀也会很有成就感，说不定将来就用上了呢。项目地址 介绍先来介绍一下这个项目吧，主要实现的功">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2017-06-16T15:24:44.000Z">
+<meta property="article:modified_time" content="2020-02-04T15:31:15.629Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/06/16/vue重构在线考试系统/"/>
+
+
+
+
+
+  <title>vue重构在线考试系统 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/16/vue%E9%87%8D%E6%9E%84%E5%9C%A8%E7%BA%BF%E8%80%83%E8%AF%95%E7%B3%BB%E7%BB%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">vue重构在线考试系统</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-16T23:24:44+08:00">
+                2017-06-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>学习了vue一段时间了，在网上跟着老师用vue做了一遍饿了么的几个页面，觉得学习一个新<br>技术还是项目驱动学起来更加的快，于是把之前和项目小组的小伙伴们写的在线考试系统重新用vue做一遍，之前做的时候只想着实现功能，导致页面性能根本没有考虑，每次点击跳转都慢的。。。虽然这个考试系统没有投入使用，但把它做好做优秀也会很有成就感，说不定将来就用上了呢。项目地址</p>
+<h4 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h4><p>先来介绍一下这个项目吧，主要实现的功能是在线考试系统的后台页面开发，管理员通过入口网页登陆进入到管理页面，可以查看课程信息，题目<br>信息，人员信息，考试信息，根据echarts图标总结考生成绩情况，这是总的功能划分，其次每个信息列表还有信息筛选的功能，可以指定查看特定一类的人员信息，课程或者题目信息<br>为了解决页面多而繁琐，我使用了vue-router做前端路由，将公用的部分组件化，实现代码重用，相比于原来每个页面都有一个tab来说，性能上<br>也能有所优化。vuex用来存储登陆用户的信息，可以使登陆后的管理页面获取到登陆页面用户输入信息。<br>静态资源我没有使用json数据进行存储在项目中，而是托管在七牛云上，之前没有使用过，想借此机会学习一下，在项目中我在api目录下实现了<br>向七牛云上传更新后的文件，使用express搭建的服务器，关于七牛云的api，可以google搜索七牛云 SDK，我在这里就不贴链接了。（这里要说一下七牛云的静态资源可能不是实时更新的，因为我成功上传更新了的文件后，登陆上去看发现时间是更新了的，但是内容并没有，而我在测试时打印出来上传的文件是更新了的）</p>
+<p>目录结构</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">|-- api                                                         &#x2F;&#x2F; 与静态资源交互目录</span><br><span class="line">|-- build                                                       &#x2F;&#x2F; 项目打包文件配置</span><br><span class="line">|-- config                                                      &#x2F;&#x2F; webpack配置目录</span><br><span class="line">|-- dist                                                        &#x2F;&#x2F; 项目编译打包目录</span><br><span class="line">|-- src                                                         &#x2F;&#x2F; 项目源文件		</span><br><span class="line">|           |-- common                                          &#x2F;&#x2F; 公共库</span><br><span class="line">|                       |-- js                                  &#x2F;&#x2F; 公共js文件</span><br><span class="line">|                                   |-- utils.js                &#x2F;&#x2F; 各种工具</span><br><span class="line">|                       |-- styLus                              &#x2F;&#x2F; 公共样式文件</span><br><span class="line">|                                   |-- index.styl              &#x2F;&#x2F; 公共样式入口文件</span><br><span class="line">|                                   |-- base.styl               &#x2F;&#x2F; 基础样式</span><br><span class="line">|                                   |-- icon.styl               &#x2F;&#x2F; 图标样式</span><br><span class="line">|                                   |-- mixin.styl              &#x2F;&#x2F; 多次使用的样式</span><br><span class="line">|                       |-- components                          &#x2F;&#x2F; 组件目录</span><br><span class="line">|                                   |-- slideshow               &#x2F;&#x2F; 登陆页轮播图组件</span><br><span class="line">|                                   |-- broadcast               &#x2F;&#x2F; 公告信息展示组件</span><br><span class="line">|                                   |-- button                  &#x2F;&#x2F; 按钮组件</span><br><span class="line">|                                   |-- alert                   &#x2F;&#x2F; 弹出框组件</span><br><span class="line">|                                   |-- dropselect              &#x2F;&#x2F; 下拉框组件</span><br><span class="line">|                                   |-- footer                  &#x2F;&#x2F; 页脚组件</span><br><span class="line">|                                   |-- header                  &#x2F;&#x2F; 页眉组件</span><br><span class="line">|                                   |-- inputtext               &#x2F;&#x2F; 输入框组件</span><br><span class="line">|                                   |-- login                   &#x2F;&#x2F; 登陆弹出框组件</span><br><span class="line">|                                   |-- swap                    &#x2F;&#x2F; 遮盖层组件</span><br><span class="line">|                                   |-- tab                     &#x2F;&#x2F; 导航组件</span><br><span class="line">|                                   |-- vuetable                &#x2F;&#x2F; 展示信息时的表格组件</span><br><span class="line">|                       |--libs                                 &#x2F;&#x2F; 引入库目录</span><br><span class="line">|                       |-- router                              &#x2F;&#x2F; vue-router目录</span><br><span class="line">|                                   |-- index.js                &#x2F;&#x2F; 路由入口文件</span><br><span class="line">|                                   |-- routes.js               &#x2F;&#x2F; 路由配置文件</span><br><span class="line">|                       |-- store                               &#x2F;&#x2F; vuex目录</span><br><span class="line">|                                   |-- module                  &#x2F;&#x2F; 各个vuex存储信息模块</span><br><span class="line">|                                   |-- index.js                &#x2F;&#x2F; store组件入口文件</span><br><span class="line">|                                   |-- types.js                &#x2F;&#x2F; 存储store模块type文件</span><br><span class="line">|                       |-- views                               &#x2F;&#x2F; 一级路由目录</span><br><span class="line">|                       |-- App.vue                             &#x2F;&#x2F; vue组件入口文件</span><br><span class="line">|                       |-- main.js                             &#x2F;&#x2F; 程序入口文件,初始化vue实例</span><br><span class="line">|-- static                                                      &#x2F;&#x2F; 静态文件目录</span><br><span class="line">|-- .babelrc                                                    &#x2F;&#x2F; babel配置文件</span><br><span class="line">|-- .eslintrc.js                                                &#x2F;&#x2F; eslint配置文件</span><br><span class="line">|-- .gitignore                                                  &#x2F;&#x2F; git提交忽略文件</span><br><span class="line">|-- pro.server.js                                               &#x2F;&#x2F; 服务器启动配置文件</span><br><span class="line">|-- index.html                                                  &#x2F;&#x2F; 入口html文件</span><br><span class="line">|-- package.json                                                &#x2F;&#x2F; 项目及工具的依赖配置文件</span><br><span class="line">|-- README.md                                                   &#x2F;&#x2F; 说明</span><br></pre></td></tr></table></figure>
+
+<h4 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h4><p>最近遇到一个问题觉得挺值得记录一下的：<br>因为项目中有一个功能是点击题目可以在弹出框中显示题目的信息，我需要获得用户点击的tr标签序号，然后将序号和整个题目数组派发给alert组件，告诉alert组件应该显示哪个题目的信息。在我点击的时候浏览器console面板显示在alert组件内没有题目数组的某个属性值，其实在看到这个问题时就应该想到是渲染时间的问题，一定是我在页面渲染时还没有获取到这个数组，所以也就找不到相关属性，于是我在调用这个组件的vue文件中发现，我在定义alert组件的显示与不显示时用的是v-show,熟悉vue的人应该都知道，v-show和v-if的区别，前者是在渲染树中生成了该节点，改变的不过是display的属性值，但后者是从渲染树中插入和删除，所以可想而知，我在调用父组件异步获取资源的同时，这个alert组件就已经被插入到渲染树中了，但是当我还没有获取到资源信息并传递给该组件时，alert组件是拿不到这个题目数组的，所以就出现这个属性的值undefined的情况了。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/27/%E5%89%8D%E5%BE%80%E5%8D%9A%E5%AE%A2%E5%9B%AD/" rel="next" title="前往博客园">
+                <i class="fa fa-chevron-left"></i> 前往博客园
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#介绍"><span class="nav-number">2.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解决问题"><span class="nav-number">3.</span> <span class="nav-text">解决问题</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

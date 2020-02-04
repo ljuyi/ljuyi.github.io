@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言项目需要,今天就手写了一个下拉框组件,二三级带多选功能(其实我在页面上根本没有见过,但是后台逻辑需要,so…),用到了bootstrap样式 初次尝试下面是js代码： 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950var dropList &#x3D; &amp;#1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="三级下拉框组件">
+<meta property="og:url" content="http://yoursite.com/2016/12/19/%E4%B8%89%E7%BA%A7%E4%B8%8B%E6%8B%89%E6%A1%86%E7%BB%84%E4%BB%B6/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="前言项目需要,今天就手写了一个下拉框组件,二三级带多选功能(其实我在页面上根本没有见过,但是后台逻辑需要,so…),用到了bootstrap样式 初次尝试下面是js代码： 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950var dropList &#x3D; &amp;#1">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2016-12-19T15:06:30.000Z">
+<meta property="article:modified_time" content="2020-02-04T15:30:09.353Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/12/19/三级下拉框组件/"/>
+
+
+
+
+
+  <title>三级下拉框组件 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/19/%E4%B8%89%E7%BA%A7%E4%B8%8B%E6%8B%89%E6%A1%86%E7%BB%84%E4%BB%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">三级下拉框组件</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-19T23:06:30+08:00">
+                2016-12-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>项目需要,今天就手写了一个下拉框组件,二三级带多选功能(其实我在页面上根本没有见过,但<br>是后台逻辑需要,so…),用到了bootstrap样式</p>
+<h3 id="初次尝试"><a href="#初次尝试" class="headerlink" title="初次尝试"></a>初次尝试</h3><p>下面是js代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">var dropList &#x3D; &#123;</span><br><span class="line">    &#39;111&#39;:&#123;&#39;1-1&#39;:[&#39;11-1&#39;,&#39;11-2&#39;,&#39;11-3&#39;,&#39;11-4&#39;],&#39;1-2&#39;:[&#39;12-1&#39;,&#39;12-2&#39;,&#39;12-3&#39;,&#39;12-4&#39;]&#125;,</span><br><span class="line">    &#39;222&#39;:&#123;&#39;2-1&#39;:[&#39;21-1&#39;,&#39;21-2&#39;,&#39;21-3&#39;,&#39;21-4&#39;],&#39;2-2&#39;:[&#39;22-1&#39;,&#39;22-2&#39;,&#39;22-3&#39;,&#39;22-4&#39;]&#125;,</span><br><span class="line">    &#39;333&#39;:&#123;&#39;3-1&#39;:[&#39;31-1&#39;,&#39;31-2&#39;,&#39;31-3&#39;,&#39;31-4&#39;],&#39;3-2&#39;:[&#39;32-1&#39;,&#39;32-2&#39;,&#39;32-3&#39;,&#39;32-4&#39;]&#125;,</span><br><span class="line">    &#39;444&#39;:&#123;&#39;4-1&#39;:[&#39;41-1&#39;,&#39;41-2&#39;,&#39;41-3&#39;,&#39;41-4&#39;],&#39;4-2&#39;:[&#39;42-1&#39;,&#39;42-2&#39;,&#39;42-3&#39;,&#39;42-4&#39;]&#125;,</span><br><span class="line">    &#39;555&#39;:&#123;&#39;5-1&#39;:[&#39;51-1&#39;,&#39;51-2&#39;,&#39;51-3&#39;,&#39;51-4&#39;],&#39;5-2&#39;:[&#39;52-1&#39;,&#39;52-2&#39;,&#39;52-3&#39;,&#39;52-4&#39;]&#125;,</span><br><span class="line">&#125;;</span><br><span class="line">var x &#x3D; 0;</span><br><span class="line">for(var i in dropList)&#123;</span><br><span class="line">    $(&#39;.dropdown&gt;ul&gt;li&#39;).eq(x).text(i);</span><br><span class="line">    var oUl &#x3D; document.createElement(&#39;ul&#39;);</span><br><span class="line">    $(&#39;.dropdown&gt;ul&gt;li&#39;).eq(x).append(oUl);</span><br><span class="line">    $(&#39;.dropdown&gt;ul&gt;li&#39;).eq(x).children(&#39;ul&#39;).addClass(&#39;dropdown-menu&#39;);</span><br><span class="line">    var xx &#x3D; 0;</span><br><span class="line">    for(var j in dropList[i])&#123;</span><br><span class="line">        $(&#39;.dropdown&gt;ul&gt;li&#39;).eq(x).children(&#39;ul&#39;).append(&#39;&lt;li class&#x3D;&quot;checkbox&quot;&gt;&lt;label&gt;&lt;input type&#x3D;&quot;checkbox&quot; class&#x3D;&quot;m-t-10&quot;&#x2F;&gt;&#39;+j+&#39;&lt;&#x2F;label&gt;&lt;&#x2F;li&gt;&#39;);</span><br><span class="line">        var oUl &#x3D; document.createElement(&#39;ul&#39;);</span><br><span class="line">        $(&#39;.dropdown&gt;ul&gt;li&#39;).eq(x).children(&#39;ul&#39;).children(&#39;li&#39;).eq(xx).append(oUl);</span><br><span class="line">        $(&#39;.dropdown&gt;ul&gt;li&#39;).eq(x).children(&#39;ul&#39;).children(&#39;li&#39;).eq(xx).children(&#39;ul&#39;).addClass(&#39;dropdown-menu&#39;);</span><br><span class="line">        for(var l &#x3D; 0; l &lt; dropList[i][j].length; l ++)&#123;</span><br><span class="line">            $(&#39;.dropdown&gt;ul&gt;li&#39;).eq(x).children(&#39;ul&#39;).children(&#39;li&#39;).eq(xx).children(&#39;ul&#39;).append(&#39;&lt;li class&#x3D;&quot;checkbox&quot;&gt;&lt;label&gt;&lt;input type&#x3D;&quot;checkbox&quot; class&#x3D;&quot;m-t-10&quot;&#x2F;&gt;&#39;+dropList[i][j][l]+&#39;&lt;&#x2F;label&gt;&lt;&#x2F;li&gt;&#39;);</span><br><span class="line">        &#125;</span><br><span class="line">        xx++;</span><br><span class="line">    &#125;</span><br><span class="line">    x++;</span><br><span class="line">&#125;</span><br><span class="line">$(&#39;.dropdown ul ul&#39;).css(&#123;left:$(&#39;.dropdown&gt;ul&#39;).position().left+$(&#39;.dropdown&gt;ul&#39;).width(),top:$(&#39;.dropdown&gt;ul&#39;).position().top&#125;);</span><br><span class="line">for(var i &#x3D; 0; i &lt; $(&#39;.dropdown&gt;ul&gt;li&#39;).length; i ++)&#123;</span><br><span class="line">    $(&#39;.dropdown&gt;ul&gt;li:eq(&#39;+i+&#39;)&#39;).click(function()&#123;</span><br><span class="line">        $(&#39;.dropdown ul ul&#39;).removeClass(&#39;display&#39;);</span><br><span class="line">        $(this).children(&#39;ul&#39;).addClass(&#39;display&#39;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line">for(var i &#x3D; 0; i&lt; $(&#39;.dropdown&gt;ul&gt;li&#39;).length; i ++)&#123;</span><br><span class="line">    for(var j &#x3D; 0; j &lt; $(&#39;.dropdown&gt;ul&gt;li&#39;).eq(i).children(&#39;ul&#39;).children(&#39;li&#39;).length; j ++)&#123;</span><br><span class="line">        $(&#39;.dropdown&gt;ul&gt;li&#39;).eq(i).children(&#39;ul&#39;).children(&#39;li&#39;).eq(j).click(function(event)&#123;</span><br><span class="line">            $(&#39;.dropdown ul ul ul&#39;).removeClass(&#39;display&#39;);</span><br><span class="line">            $(this).children(&#39;ul&#39;).addClass(&#39;display&#39;);</span><br><span class="line">            event.stopPropagation();</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">$(&#39;#dLabel&#39;).click(function(event)&#123;</span><br><span class="line">    $(&#39;.dropdown&gt;ul&#39;).toggleClass(&#39;display&#39;);</span><br><span class="line">&#125;);</span><br><span class="line">$(&#39;#commit&#39;).click(function()&#123;</span><br><span class="line">    &#x2F;*remember which be selected*&#x2F;</span><br><span class="line">    $(&#39;.dropdown input[type&#x3D;&quot;checkbox&quot;]&#39;).attr(&#39;checked&#39;,false);</span><br><span class="line">    $(&#39;.dropdown ul&#39;).removeClass(&#39;display&#39;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>我是在js里向html页面用一个json插数据的,可以直接在json里改内容,但是一级下拉菜单的li标签需要在页面上写出来,二三级的根据内容多少来定<br>其实逻辑实现并不难,最大的难点就是我对获取页面节点操作还不是很熟练,因为获取到第三级ul下的li标签内容时遇到了很多困难,总是获取不到.后来发现是因为我取第三级元素的方法太不严密了,导致用jq选择器根本获取不到,我原来是这样写的:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(&#39;.dropdown ul ul ul&#39;)</span><br></pre></td></tr></table></figure>
+<p>这样写不够具体,因为第二级ul下有很多li标签,而在这些li标签内又分别都有ul,所以需要用循环分别获取到第一层的ul下的每一个li,再在每一个li下获取ul,一定要具体具体具体,写的时候会很绕,但是一遍默念一边写就会觉得很清晰,,哈哈,适合一个人的时候写~</p>
+<h3 id="组件优化"><a href="#组件优化" class="headerlink" title="组件优化"></a>组件优化</h3><p>上次用的方法是在每一个li下都用js插入ul,这次我在页面上只用了三个ul,根据选择的不同,把相应的内容更新到ul中,我觉得这种方法更高效,也更节省资源<br>代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">var dropList &#x3D; &#123;</span><br><span class="line">    &#39;111&#39;:&#123;&#39;1-1&#39;:[&#39;11-1&#39;,&#39;11-2&#39;,&#39;11-3&#39;,&#39;11-4&#39;],&#39;1-2&#39;:[&#39;12-1&#39;,&#39;12-2&#39;,&#39;12-3&#39;,&#39;12-4&#39;]&#125;,</span><br><span class="line">    &#39;222&#39;:&#123;&#39;2-1&#39;:[&#39;21-1&#39;,&#39;21-2&#39;,&#39;21-3&#39;,&#39;21-4&#39;],&#39;2-2&#39;:[&#39;22-1&#39;,&#39;22-2&#39;,&#39;22-3&#39;,&#39;22-4&#39;]&#125;,</span><br><span class="line">    &#39;333&#39;:&#123;&#39;3-1&#39;:[&#39;31-1&#39;,&#39;31-2&#39;,&#39;31-3&#39;,&#39;31-4&#39;],&#39;3-2&#39;:[&#39;32-1&#39;,&#39;32-2&#39;,&#39;32-3&#39;,&#39;32-4&#39;]&#125;,</span><br><span class="line">    &#39;444&#39;:&#123;&#39;4-1&#39;:[&#39;41-1&#39;,&#39;41-2&#39;,&#39;41-3&#39;,&#39;41-4&#39;],&#39;4-2&#39;:[&#39;42-1&#39;,&#39;42-2&#39;,&#39;42-3&#39;,&#39;42-4&#39;]&#125;,</span><br><span class="line">    &#39;555&#39;:&#123;&#39;5-1&#39;:[&#39;51-1&#39;,&#39;51-2&#39;,&#39;51-3&#39;,&#39;51-4&#39;],&#39;5-2&#39;:[&#39;52-1&#39;,&#39;52-2&#39;,&#39;52-3&#39;,&#39;52-4&#39;]&#125;,</span><br><span class="line">&#125;;</span><br><span class="line">$(&#39;.dropdown&gt;ul&#39;).css(&#123;left:$(&#39;.dropdown&#39;).position().left,top:$(&#39;.dropdown&#39;).position().top+$(&#39;.dropdown&gt;button&#39;).height()+15&#125;);</span><br><span class="line">var x &#x3D; 0, index;</span><br><span class="line">for(var i in dropList)&#123;</span><br><span class="line">    $(&#39;.dropdown&gt;ul&gt;li&#39;).eq(x).html(i);</span><br><span class="line">    x ++;</span><br><span class="line">&#125;</span><br><span class="line">$(&#39;.dropdown&gt;ul&gt;li&#39;).click(function()&#123;</span><br><span class="line">    $(&#39;.dropdown&gt;ul&gt;ul&#39;).css(&#123;left:$(&#39;.dropdown&gt;ul&#39;).position().left + $(&#39;.dropdown&gt;ul&#39;).width() + 3&#125;);</span><br><span class="line">    var top &#x3D; $(this).position().top;</span><br><span class="line">    $(&#39;.dropdown&gt;ul&gt;ul&#39;).css(&#123;top:top&#125;);</span><br><span class="line">    $(&#39;.dropdown&gt;ul&gt;ul&#39;).addClass(&#39;display&#39;);</span><br><span class="line">    $(&#39;.dropdown&gt;ul&gt;ul&gt;li&#39;).remove();</span><br><span class="line">    for(var j in dropList[$(this).html()])&#123;</span><br><span class="line">        $(&#39;.dropdown&gt;ul&gt;ul&#39;).append(&#39;&lt;label&gt;&lt;li&gt;&lt;input type&#x3D;&quot;checkbox&quot;&#x2F;&gt;&#39; + j + &#39;&lt;&#x2F;li&gt;&lt;&#x2F;label&gt;&#39;);</span><br><span class="line">    &#125;</span><br><span class="line">    index &#x3D; $(this).text();</span><br><span class="line">&#125;);</span><br><span class="line">$(&#39;.dropdown&gt;ul&gt;ul&#39;).on(&#39;click&#39;,&#39;&gt;label&gt;li&#39;,function()&#123;</span><br><span class="line">    $(&#39;.dropdown&gt;ul&gt;ul&gt;ul&#39;).css(&#123;left:$(&#39;.dropdown&gt;ul&gt;ul&#39;).position().left&#125;);</span><br><span class="line">    var top &#x3D; $(this).position().top;</span><br><span class="line">    $(&#39;.dropdown&gt;ul&gt;ul&gt;ul&#39;).css(&#123;top:top&#125;);</span><br><span class="line">    $(&#39;.dropdown&gt;ul&gt;ul&gt;ul&#39;).addClass(&#39;display&#39;);</span><br><span class="line">    $(&#39;.dropdown&gt;ul&gt;ul&gt;ul&gt;*&#39;).remove();</span><br><span class="line">    dropList[index][$(this).text()].forEach(function(value)&#123;</span><br><span class="line">        $(&#39;.dropdown&gt;ul&gt;ul&gt;ul&#39;).append(&#39;&lt;label&gt;&lt;li&gt;&lt;input type&#x3D;&quot;checkbox&quot;&#x2F;&gt;&#39; + value + &#39;&lt;&#x2F;li&gt;&lt;&#x2F;label&gt;&#39;);</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;);</span><br><span class="line">$(&#39;#dLabel&#39;).click(function()&#123;</span><br><span class="line">    $(&#39;.dropdown&gt;ul&#39;).toggleClass(&#39;display&#39;);</span><br><span class="line">&#125;);</span><br><span class="line">$(&#39;#commit&#39;).click(function()&#123;</span><br><span class="line">    &#x2F;*remember which be selected*&#x2F;</span><br><span class="line">    $(&#39;.dropdown ul&#39;).removeClass(&#39;display&#39;);</span><br><span class="line">&#125;);</span><br><span class="line">这个逻辑上也比之前的要容易得多~</span><br><span class="line"></span><br><span class="line">下面是html代码部分:</span><br><span class="line"></span><br><span class="line">&lt;div class&#x3D;&quot;dropdown&quot;&gt;</span><br><span class="line">    &lt;button id&#x3D;&quot;dLabel&quot; class&#x3D;&quot;btn btn-default&quot; type&#x3D;&quot;button&quot; aria-haspopup&#x3D;&quot;true&quot; aria-expanded&#x3D;&quot;false&quot;&gt;</span><br><span class="line">        下拉框</span><br><span class="line">        &lt;span class&#x3D;&quot;caret&quot;&gt;&lt;&#x2F;span&gt;</span><br><span class="line">    &lt;&#x2F;button&gt;</span><br><span class="line">    &lt;ul class&#x3D;&quot;dropdown-menu&quot; role&#x3D;&quot;menu&quot; aria-labelledby&#x3D;&quot;dLabel&quot;&gt;</span><br><span class="line">        &lt;li&gt;&lt;&#x2F;li&gt;</span><br><span class="line">        &lt;li&gt;&lt;&#x2F;li&gt;</span><br><span class="line">        &lt;li&gt;&lt;&#x2F;li&gt;</span><br><span class="line">        &lt;li&gt;&lt;&#x2F;li&gt;</span><br><span class="line">        &lt;li&gt;&lt;&#x2F;li&gt;</span><br><span class="line">        &lt;ul class&#x3D;&quot;dropdown-menu&quot; role&#x3D;&quot;menu&quot; aria-labelledby&#x3D;&quot;dLabel&quot;&gt;</span><br><span class="line">            &lt;ul class&#x3D;&quot;dropdown-menu&quot; role&#x3D;&quot;menu&quot; aria-labelledby&#x3D;&quot;dLabel&quot;&gt;</span><br><span class="line">            &lt;&#x2F;ul&gt;</span><br><span class="line">        &lt;&#x2F;ul&gt;</span><br><span class="line">    &lt;&#x2F;ul&gt;</span><br><span class="line">    &lt;button id&#x3D;&quot;commit&quot; type&#x3D;&quot;button&quot; class&#x3D;&quot;btn btn-default&quot;&gt;</span><br><span class="line">        确定</span><br><span class="line">    &lt;&#x2F;button&gt;</span><br><span class="line">&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/16/jsp%E6%A0%87%E7%AD%BE/" rel="next" title="jsp标签">
+                <i class="fa fa-chevron-left"></i> jsp标签
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/14/sass%E2%80%94%E2%80%94css%E9%A2%84%E7%BC%96%E8%AF%91%E5%99%A8%E7%9A%84%E5%AD%A6%E4%B9%A0/" rel="prev" title="sass——css预编译器的学习">
+                sass——css预编译器的学习 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初次尝试"><span class="nav-number">2.</span> <span class="nav-text">初次尝试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#组件优化"><span class="nav-number">3.</span> <span class="nav-text">组件优化</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
